@@ -76,7 +76,7 @@ __gcloud-components ()
 
   case $state in
     (command)
-      _describe -t commands "gcloud :: components Commands" _auth_components
+      _describe -t commands "gcloud :: components Commands" _components_arguments
       return
       ;;
   esac
@@ -101,7 +101,7 @@ __gcloud-config ()
 
   case $state in
     (command)
-      _describe -t commands "gcloud :: config Commands" _auth_config
+      _describe -t commands "gcloud :: config Commands" _config_arguments
       return
       ;;
   esac
@@ -129,7 +129,7 @@ __gcloud-sql ()
 
   case $state in
     (command)
-      _describe -t commands "gcloud :: sql Commands" _auth_sql
+      _describe -t commands "gcloud :: sql Commands" _sql_arguments
       return
       ;;
   esac
@@ -148,7 +148,7 @@ _arguments -C \
 
 case $state in
   (command)
-    _describe -t commands "Cloud SDK Commands" _first_arguments
+    _describe -t commands "Google Cloud SDK Commands" _first_arguments
     return
   ;;
 
