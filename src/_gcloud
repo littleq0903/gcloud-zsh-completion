@@ -1,0 +1,180 @@
+#compdef gcloud
+#------------------------------------------------------------
+# Description:
+#
+#  Completion script for Google Cloud SDK
+#
+# Author:
+#
+#  * Colin Su (https://github.com/littleq0903)
+#------------------------------------------------------------
+
+## Common stuffs
+local -a _first_arguments
+_first_arguments=(
+# these are command groups
+  'auth:Manage oauth2 credentials for the Google Cloud SDK'
+  'components:Install, update, or remove the tools in the Google Cloud SDK'
+  'config:View and edit Google Cloud SDK properties'
+  'sql:Manage Cloud SQL databases'
+# these are just commands
+	'init:Initialize a gcloud workspace in the current directory'
+	'interactive:Use this tool in an interactive python shell'
+	'version:Print version information for Cloud SDK components'
+)
+
+# common options
+common_ops=(
+    {--project,-p}"[Google Cloud Platform project to use for this invocation]"
+    {--quiet,-q}"[Disable all interactive prompts when running gcloud commands. If input is required, defaults will be used, or an error will be raised.]"
+)
+
+## for 'auth' command group
+# Commands
+local -a _auth_arguments
+_auth_arguments=(
+  "activate-refresh-token:Get credentials via an existing refresh token"
+  "list:List the accounts for known credentials"
+  "login:Get credentials via Google's oauth2 web flow"
+  "revoke:Revoke authorization for credentials"
+)
+
+__gcloud-auth ()
+{
+  local curcontext="$curcontext" state line
+  local -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gcloud :: auth Commands" _auth_arguments
+      return
+      ;;
+  esac
+}
+
+## for 'components' command groups
+local -a _components_arguments
+_components_arguments=(
+  'list:Command to list the current state of installed components'
+  'remove:Command to remove installed components'
+  'restore:Command to restore a backup of a Cloud SDK installation'
+  'update:Command to update existing or install new components'
+)
+
+__gcloud-components ()
+{
+  local curcontext="$curcontext" state line
+  local -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gcloud :: components Commands" _auth_components
+      return
+      ;;
+  esac
+}
+
+## for 'config' command groups
+local -a _config_arguments
+_config_arguments=(
+  'list:View Google Cloud SDK properties'
+  'set:Edit Google Cloud SDK properties'
+  'unset:Erase Google Cloud SDK properties'
+)
+
+__gcloud-config ()
+{
+  local curcontext="$curcontext" state line
+  local -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gcloud :: config Commands" _auth_config
+      return
+      ;;
+  esac
+}
+
+
+## for 'sql' command groups
+local -a _sql_arguments
+_sql_arguments=(
+  'backups:Provide commands for working with backups of Cloud SQL instances'
+  'instances:Provide commands for managing Cloud SQL instances'
+  'operations:Provide commands for working with Cloud SQL instance operations'
+  'ssl-certs:Provide commands for managing SSL certificates of Cloud SQL instances'
+  'tiers:Provide a command to list tiers'
+)
+
+__gcloud-sql ()
+{
+  local curcontext="$curcontext" state line
+  local -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gcloud :: sql Commands" _auth_sql
+      return
+      ;;
+  esac
+}
+
+
+## Top-level completion function
+local expl
+local curcontext="$curcontext" state line
+local -A opt_args
+
+_arguments -C \
+  ':command:->command' \
+  $common_ops \
+  '*::options:->options'
+
+case $state in
+  (command)
+    _describe -t commands "Cloud SDK Commands" _first_arguments
+    return
+  ;;
+
+  (options)
+    # subcommand
+    case $line[1] in
+      (auth)
+        __gcloud-auth
+        ;;
+      (components)
+        __gcloud-components
+        ;;
+      (config)
+        __gcloud-config
+        ;;
+      (sql)
+        __gcloud-sql
+        ;;
+    esac
+  ;;
+esac
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et
