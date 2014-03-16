@@ -23,7 +23,6 @@ __variable_list ()
     _wanted application expl 'Configuration Variables' compadd $(command gcloud config list 2> /dev/null | grep "=" | sed -e "s/ = .*//g")
 }
 
-
 ## Common stuffs
 local -a _first_arguments
 _first_arguments=(
@@ -64,12 +63,6 @@ __gcloud-auth ()
   _arguments \
     ':command:->command' \
     '*::options:->options'
-
-#  echo
-#  echo state: $state
-#  echo line: $line
-#  echo curcontext $curcontext
-#  echo
 
   case $state in
     (command)
@@ -335,7 +328,6 @@ __gcloud-sql ()
   esac
 }
 
-
 ## Top-level completion function
 local expl
 local curcontext="$curcontext" state line
@@ -351,15 +343,8 @@ case $state in
     _describe -t commands "Google Cloud SDK Commands" _first_arguments
   ;;
 
-
   (options)
     # subcommands
-#    echo
-#    echo state: $state
-#    echo line: $line 
-#    echo "line[1]": $line[1]
-#    echo words: $words
-#    echo 
     case $line[1] in
       (auth)
         __gcloud-auth
