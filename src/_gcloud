@@ -196,20 +196,109 @@ __gcloud-sql ()
       _describe -t commands "gcloud :: sql Commands" _sql_arguments
       return
       ;;
+    (options)
+      case $line[1] in
+        (backups)
+          _sql_backups_arguments=(
+            "get:Retrieves information about a backup"
+            "list:Lists all backups associated with a given instance"
+          )
+
+          _arguments \
+            ':command:->command' \
+            {--instance+,-i+}":Cloud SQL instance ID:( )" \
+            '*::options:->options'
+
+          case $state in
+            (command)
+              local -a _sql_backups_arguments
+              _describe -t commands "gcloud :: sql :: backup Commands" _sql_backups_arguments
+              ;;
+          esac
+          ;;
+        (instances)
+          # too many optional options in here, cry ;(
+          _sql_instances_arguments=(
+            'create:Creates a new Cloud SQL instance'
+            'delete:Deletes a Cloud SQL instance'
+            'export:Exports data from a Cloud SQL instance'
+            'get:Retrieves information about a Cloud SQL instance'
+            'import:Imports data into a Cloud SQL instance from Google Cloud Storage'
+            'list:Lists Cloud SQL instances in a given project'
+            'patch:Updates the settings of a Cloud SQL instance'
+            'reset-ssl-config:Deletes all client certificates and generates a new server certificate'
+            'restart:Restarts a Cloud SQL instance'
+            'restore-backup:Restores a backup of a Cloud SQL instance'
+            'set-root-password:Sets the password of the MySQL root user'
+          )
+
+          _arguments \
+            ':command:->command' \
+            '*::options:->options'
+
+          case $state in
+            (command)
+              _describe -t commands "gcloud :: sql :: instances Commands" _sql_instances_arguments
+              ;;
+          esac
+          ;;
+        (operations)
+          local -a _sql_operations_arguments
+          _sql_operations_arguments=(
+            "get:Retrieves information about a Cloud SQL instance operation."
+            "list:Lists all instance operations for the given Cloud SQL instance"
+          )
+
+          _arguments \
+            ':command:->command' \
+            {--instance+,-i+}":Cloud SQL instance ID:( )" \
+            '*::options:->options'
+
+          case $state in
+            (command)
+              _describe -t commands "gcloud :: sql :: operations Commands" _sql_backups_arguments
+              ;;
+          esac
+          ;;
+        (ssl-certs)
+          local -a _sql_sslcerts_arguments
+          _sql_sslcerts_arguments=(
+            'create:Creates an SSL certificate for a Cloud SQL instance'
+            'delete:Deletes an SSL certificate for a Cloud SQL instance'
+            'get:Retrieves information about an SSL cert for a Cloud SQL instance'
+            'list:Lists all SSL certs for a Cloud SQL instance'
+          )
+
+          _arguments \
+            ':command:->command' \
+            {--instance+,-i+}":Cloud SQL instance ID:( )" \
+            '*::options:->options'
+
+          case $state in
+            (command)
+              _describe -t commands "gcloud :: sql :: ssl-certs Commands" _sql_sslcerts_arguments
+              ;;
+          esac
+          ;;
+        (tiers)
+          local -a _sql_tiers_arguments
+          _sql_tiers_arguments=(
+            "list:Lists all available service tiers for Google Cloud SQL"
+          )
+
+          _arguments \
+            ':command:->command' \
+            '*::options:->options'
+
+          case $state in
+            (command)
+              _describe -t commands "gcloud :: sql :: tiers Commands" _sql_tiers_arguments
+              ;;
+          esac
+          ;;
+      esac
+      ;;
   esac
-}
-
-## Utils
-
-skip_options () {
-  local origin_line=$1
-  local clean_line
-  for i in $origin_line
-  do
-    echo $i
-    [[ $i[1,2] != "--" ]] && clean_line="$clean_line $i"
-  done
-  print $clean_line
 }
 
 
