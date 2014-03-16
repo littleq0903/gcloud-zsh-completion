@@ -3,6 +3,8 @@ gcloud-zsh-completion
 
 Z Shell auto completion for Google Cloud SDK
 
+demo: https://asciinema.org/a/8185
+
 
 ## Installation
 
