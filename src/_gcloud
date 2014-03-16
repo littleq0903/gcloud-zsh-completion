@@ -8,16 +8,17 @@
 #
 #  * Colin Su (https://github.com/littleq0903)
 #------------------------------------------------------------
+#
 
 ## Common stuffs
 local -a _first_arguments
 _first_arguments=(
-# these are command groups
+  # these are command groups
   'auth:Manage oauth2 credentials for the Google Cloud SDK'
   'components:Install, update, or remove the tools in the Google Cloud SDK'
   'config:View and edit Google Cloud SDK properties'
   'sql:Manage Cloud SQL databases'
-# these are just commands
+  # these are just commands
 	'init:Initialize a gcloud workspace in the current directory'
 	'interactive:Use this tool in an interactive python shell'
 	'version:Print version information for Cloud SDK components'
@@ -25,8 +26,10 @@ _first_arguments=(
 
 # common options
 common_ops=(
-    {--project,-p}"[Google Cloud Platform project to use for this invocation]"
-    {--quiet,-q}"[Disable all interactive prompts when running gcloud commands. If input is required, defaults will be used, or an error will be raised.]"
+  {--project+,-p+}":[Google Cloud Platform project to use for this invocation]:( )"
+  {--quiet,-q}"[Disable all interactive prompts when running gcloud commands. If input is required, defaults will be used, or an error will be raised.]"
+  "--user-output-enabled+:Control whether user intended output is printed to the console.:(true false)"
+  "--verbosity+:Override the default verbosity for this command. This must be a standard logging verbosity level:(debug info warning error critical none)"
 )
 
 ## for 'auth' command group
@@ -44,14 +47,42 @@ __gcloud-auth ()
   local curcontext="$curcontext" state line
   local -A opt_args
 
-  _arguments -C \
+  _arguments \
     ':command:->command' \
     '*::options:->options'
 
+#  echo
+#  echo state: $state
+#  echo line: $line
+#  echo curcontext $curcontext
+#  echo
+
   case $state in
     (command)
-      _describe -t commands "gcloud :: auth Commands" _auth_arguments
+      _describe -t subcommand "gcloud :: auth Commands" _auth_arguments
       return
+      ;;
+    (options)
+      case $line[1] in
+        (list)
+          _arguments \
+            "--account+::List only credentials for one account:( )"
+        ;;
+        (login)
+          # TODO: make options repeatable
+          local args
+          args=(
+            "--account+:Override the account acquired from the web flow:( )"
+            "--do-not-activate:Do not set the new credentials as active"
+            "--no-launch-browser:Print a URL to be copied instead of launching a web browser"
+            )
+          _arguments -C $args
+        ;;
+        (revoke)
+          _arguments \
+            "--all:Revoke all known credentials"
+        ;;
+      esac
       ;;
   esac
 }
@@ -135,6 +166,19 @@ __gcloud-sql ()
   esac
 }
 
+## Utils
+
+skip_options () {
+  local origin_line=$1
+  local clean_line
+  for i in $origin_line
+  do
+    echo $i
+    [[ $i[1,2] != "--" ]] && clean_line="$clean_line $i"
+  done
+  print $clean_line
+}
+
 
 ## Top-level completion function
 local expl
@@ -142,18 +186,24 @@ local curcontext="$curcontext" state line
 local -A opt_args
 
 _arguments -C \
-  ':command:->command' \
   $common_ops \
+  ':command:->command' \
   '*::options:->options'
 
 case $state in
   (command)
     _describe -t commands "Google Cloud SDK Commands" _first_arguments
-    return
   ;;
 
+
   (options)
-    # subcommand
+    # subcommands
+#    echo
+#    echo state: $state
+#    echo line: $line 
+#    echo "line[1]": $line[1]
+#    echo words: $words
+#    echo 
     case $line[1] in
       (auth)
         __gcloud-auth
@@ -171,6 +221,7 @@ case $state in
   ;;
 esac
 
+return 0
 # Local Variables:
 # mode: Shell-Script
 # sh-indentation: 2
