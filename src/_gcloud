@@ -149,6 +149,25 @@ __gcloud-config ()
       _describe -t commands "gcloud :: config Commands" _config_arguments
       return
       ;;
+    (options)
+      case $line[1] in
+        (list)
+          _arguments \
+            "--all:List all set and unset properties that match the arguments" \
+            {--section+,-s+}":The section whose properties shall be listed:( )"
+          ;;
+        (set)
+          _arguments \
+            "--global-only:Set the option in the global properties file" \
+            {--section+,-s+}":The section containing the option to be set:( )"
+          ;;
+        (unset)
+          _arguments \
+            "--global-only:Unset the option in the global properties file" \
+            {--section+,-s+}":The section containing the option to be unset:( )"
+          ;;
+      esac
+      ;;
   esac
 }
 
