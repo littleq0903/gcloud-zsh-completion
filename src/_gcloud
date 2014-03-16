@@ -110,6 +110,20 @@ __gcloud-components ()
       _describe -t commands "gcloud :: components Commands" _components_arguments
       return
       ;;
+    (options)
+      case $line[1] in
+        (list)
+          _arguments \
+            "--show-versions:Show version information for all components"
+          ;;
+        (remove)
+          ;;
+        (restore)
+          ;;
+        (update)
+          ;;
+      esac
+      ;;
   esac
 }
 
