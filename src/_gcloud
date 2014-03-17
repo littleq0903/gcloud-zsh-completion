@@ -14,13 +14,13 @@
 # get authorized account list
 __account_list ()
 {
-    _wanted application expl 'Accounts' compadd $(command gcloud auth list 2> /dev/null | grep - | sed -e "s/^ - //g" | sed -e "s/(active)//g")
+    _wanted application expl 'Authorized Google Accounts' compadd $(command gcloud auth list 2> /dev/null | grep - | sed -e "s/^ - //g" | sed -e "s/(active)//g")
 }
 
 # get config variable names
 __variable_list ()
 {
-    _wanted application expl 'Configuration Variables' compadd $(command gcloud config list 2> /dev/null | grep "=" | sed -e "s/ = .*//g")
+    _wanted application expl 'gcloud :: config :: Configuration Variables' compadd $(command gcloud config list 2> /dev/null | grep "=" | sed -e "s/ = .*//g")
 }
 
 ## Common stuffs
