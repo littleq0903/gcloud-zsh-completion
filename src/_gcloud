@@ -164,6 +164,7 @@ __gcloud-config ()
             {--section+,-s+}":The section whose properties shall be listed:( )"
           ;;
         (set)
+          # FEATURE: gcloud config set <property>, will complete the property names
           local -a _config_set_arguments
           _config_set_arguments=(
             "--global-only:Set the option in the global properties file"
@@ -179,6 +180,7 @@ __gcloud-config ()
             (value)
               case $line[1] in
                 (account)
+                  # FEATURE: gcloud config set account <authed_account>
                   # when `config set account <cursor>`, completing by authroized accounts
                   _arguments -C \
                     '2:feature:__account_list'
@@ -189,9 +191,15 @@ __gcloud-config ()
 
           ;;
         (unset)
-          _arguments \
-            "--global-only:Unset the option in the global properties file" \
+          # FEATURE: gcloud config unset <property>, will complete the property names
+          local -a _config_unset_arguments
+          _config_unset_arguments=(
+            "--global-only:Unset the option in the global properties file"
             {--section+,-s+}":The section containing the option to be unset:( )"
+          )
+          _arguments \
+            $_config_unset_arguments \
+            '1:feature:__variable_list'
           ;;
       esac
       ;;
