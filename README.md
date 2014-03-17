@@ -1,11 +1,11 @@
 gcloud-zsh-completion
 =====================
 
-![gcloud-zsh-completion](https://f.cloud.github.com/assets/374786/2430363/a329fad8-acd7-11e3-83ac-d626449568e9.png)
-
 Z Shell auto completion for Google Cloud SDK
 
 demo: https://asciinema.org/a/8185
+
+![gcloud-zsh-completion](https://f.cloud.github.com/assets/374786/2430363/a329fad8-acd7-11e3-83ac-d626449568e9.png)
 
 ## Features
 
