@@ -14,6 +14,12 @@
 #
 #------------------------------------------------------------
 
+## Utils
+
+__get_yaml_files () {
+    _wanted application expl 'Google App Engine Configuration' compadd $(command find . -depth 1 -name "*.yaml")
+    _wanted application expl 'Google App Engine Configuration' compadd $(command echo '.')
+}
 
 ## Actions
 local -a _action_backends_arguments
@@ -130,6 +136,7 @@ case $state in
 
     case $words[1] in
       (backends)
+        # if action argument is 'backends', give its subcommand
         _arguments -C \
           ':action:->action' \
           '*::options:->options'
@@ -138,7 +145,13 @@ case $state in
           (action)
             _describe -t subactions "appcfg.py backends" _action_backends_arguments
             ;;
+          (options)
+            _arguments '*:feature:__get_yaml_files'
+            ;;
         esac
+        ;;
+      (*)
+        _arguments -C '*:feature:__get_yaml_files'
         ;;
     esac
 
