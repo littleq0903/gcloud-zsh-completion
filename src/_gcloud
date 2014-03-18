@@ -44,7 +44,7 @@ _first_arguments=(
 
 # common options
 common_ops=(
-  {--project+,-p+}":[Google Cloud Platform project to use for this invocation]:( )"
+  {--project+,-p+}":Google Cloud Platform project to use for this invocation:( )"
   {--quiet,-q}"[Disable all interactive prompts when running gcloud commands. If input is required, defaults will be used, or an error will be raised.]"
   "--user-output-enabled+:Control whether user intended output is printed to the console.:(true false)"
   "--verbosity+:Override the default verbosity for this command. This must be a standard logging verbosity level:(debug info warning error critical none)"
@@ -85,14 +85,14 @@ __gcloud-auth ()
           local args
           args=(
             "--account+:Override the account acquired from the web flow:( )"
-            "--do-not-activate:Do not set the new credentials as active"
-            "--no-launch-browser:Print a URL to be copied instead of launching a web browser"
+            "--do-not-activate[Do not set the new credentials as active]"
+            "--no-launch-browser[Print a URL to be copied instead of launching a web browser]"
             )
           _arguments -C $args
         ;;
         (revoke)
           _arguments \
-            "--all:Revoke all known credentials"
+            "--all[Revoke all known credentials]"
         ;;
       esac
       ;;
@@ -126,7 +126,7 @@ __gcloud-components ()
       case $line[1] in
         (list)
           _arguments \
-            "--show-versions:Show version information for all components"
+            "--show-versions[Show version information for all components]"
           ;;
         (remove)
           ;;
@@ -165,14 +165,14 @@ __gcloud-config ()
       case $line[1] in
         (list)
           _arguments \
-            "--all:List all set and unset properties that match the arguments" \
+            "--all[List all set and unset properties that match the arguments]" \
             {--section+,-s+}":The section whose properties shall be listed:( )"
           ;;
         (set)
           # FEATURE: gcloud config set <property>, will complete the property names
           local -a _config_set_arguments
           _config_set_arguments=(
-            "--global-only:Set the option in the global properties file"
+            "--global-only[Set the option in the global properties file]"
             {--section+,-s+}":The section containing the option to be set:( )"
           )
 
@@ -199,7 +199,7 @@ __gcloud-config ()
           # FEATURE: gcloud config unset <property>, will complete the property names
           local -a _config_unset_arguments
           _config_unset_arguments=(
-            "--global-only:Unset the option in the global properties file"
+            "--global-only[Unset the option in the global properties file]"
             {--section+,-s+}":The section containing the option to be unset:( )"
           )
           _arguments \
