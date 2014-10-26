@@ -34,6 +34,7 @@ _first_arguments=(
   # these are command groups
   'auth:Manage oauth2 credentials for the Google Cloud SDK'
   'components:Install, update, or remove the tools in the Google Cloud SDK'
+  'compute:Read and manipulate Google Compute Engine resources'
   'config:View and edit Google Cloud SDK properties'
   'sql:Manage Cloud SQL databases'
   # these are just commands
@@ -137,6 +138,55 @@ __gcloud-components ()
       esac
       ;;
   esac
+}
+
+## for 'compute' command groups
+local -a _compute_arguments
+_compute_arguments=(
+  "addresses:Read and manipulate Google Compute Engine addresses."
+  "backend-services:List, create, and delete backend services."
+  "disk-types:Read Google Compute Engine virtual disk types."
+  "disks:Read and manipulate Google Compute Engine disks."
+  "firewall-rules:List, create, and delete Google Compute Engine firewall rules."
+  "forwarding-rules:Read and manipulate forwarding rules to send traffic to load balancers."
+  "http-health-checks:Read and manipulate HTTP health checks for load balanced instances."
+  "images:List, create, and delete Google Compute Engine images."
+  "instances:Read and manipulate Google Compute Engine virtual machine instances."
+  "machine-types:Read Google Compute Engine virtual machine types."
+  "networks:List, create, and delete Google Compute Engine networks."
+  "operations:Read and manipulate Google Compute Engine operations."
+  "project-info:Read and manipulate project-level data like quotas and metadata."
+  "regions:List Google Compute Engine regions."
+  "routes:Read and manipulate routes."
+  "snapshots:List, describe, and delete Google Compute Engine snapshots."
+  "target-http-proxies:List, create, and delete target HTTP proxies."
+  "target-instances:Read and manipulate Google Compute Engine virtual target instances."
+  "target-pools:Read and manipulate Google Compute Engine target pools."
+  "url-maps:List, create, and delete URL maps."
+  "zones:List Google Compute Engine zones."
+  "config-ssh:Populate SSH config files with Host entries from each instance"
+  "copy-files:Copy files to and from Google Compute Engine virtual machines."
+  "ssh:SSH into a virtual machine instance."
+)
+
+__gcloud-compute ()
+{
+  local curcontext="$curcontext" state line
+  local -A opt_args
+
+  _arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+  case $state in
+    (command)
+      _describe -t commands "gcloud :: compute commands" _compute_arguments
+      return
+      ;;
+  esac
+
+        
+
 }
 
 ## for 'config' command groups
@@ -361,6 +411,9 @@ case $state in
     case $line[1] in
       (auth)
         __gcloud-auth
+        ;;
+      (compute)
+        __gcloud-compute
         ;;
       (components)
         __gcloud-components
