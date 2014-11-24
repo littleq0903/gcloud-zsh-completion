@@ -42,7 +42,7 @@ compinit
 
 > Remember, your fpath configuration need to be set up before you called `compinit`.
 
-## Arthors
+## Authors
 
 * Colin Su - https://github.com/littleq0903
 
